@@ -2,10 +2,11 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- ★ 追加 -->
-    <title>Live2D風 スマホ対応</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live2D風</title>
     <style>
-      html, body {
+      html,
+      body {
         margin: 0;
         height: 100%;
         overflow: hidden;
@@ -58,8 +59,8 @@
           el: document.getElementById("face"),
           x: centerX,
           y: centerY,
-          targetX: centerX,
-          targetY: centerY,
+          // targetX: centerX,
+          // targetY: centerY,
           maxRadius: 20,
           speed: 0.04,
           offsetX: 0,
@@ -92,20 +93,38 @@
       });
 
       // スマホ: タッチ対応
-      document.addEventListener("touchmove", (e) => {
-        if (e.touches.length > 0) {
-          const touch = e.touches[0];
-          updateTargets(touch.clientX, touch.clientY);
-        }
-      }, { passive: true }); // スクロール抑制を避ける
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          if (e.touches.length > 0) {
+            const touch = e.touches[0];
+            updateTargets(touch.clientX, touch.clientY);
+          }
+        },
+        { passive: true }
+      ); // スクロール抑制を避ける
 
       function animate() {
-        for (const obj of objects) {
-          obj.x += (obj.targetX - obj.x) * obj.speed;
-          obj.y += (obj.targetY - obj.y) * obj.speed;
-          obj.el.style.left = `${obj.x}px`;
-          obj.el.style.top = `${obj.y}px`;
-        }
+        const eye = objects[0]; // 画像1（目）
+        const face = objects[1]; // 画像2（顔）
+
+        // 目を動かす（今までどおり）
+        eye.x += (eye.targetX - eye.x) * eye.speed;
+        eye.y += (eye.targetY - eye.y) * eye.speed;
+        eye.el.style.left = `${eye.x}px`;
+        eye.el.style.top = `${eye.y}px`;
+
+        // 目の移動に連動して顔を動かす（倍率は小さめ）
+        const eyeOffsetX = eye.x - (centerX + eye.offsetX);
+        const eyeOffsetY = eye.y - (centerY + eye.offsetY);
+        const faceTargetX = centerX + face.offsetX + eyeOffsetX * 0.5; // ←連動度合い
+        const faceTargetY = centerY + face.offsetY + eyeOffsetY * 0.5;
+
+        face.x += (faceTargetX - face.x) * face.speed;
+        face.y += (faceTargetY - face.y) * face.speed;
+        face.el.style.left = `${face.x}px`;
+        face.el.style.top = `${face.y}px`;
+
         requestAnimationFrame(animate);
       }
 
