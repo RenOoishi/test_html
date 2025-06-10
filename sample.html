@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Live2D風 2画像追従</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #f0f0f0;
+      }
+      #container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      .follow-img {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      /* 画像の大きさが違った場合はこちらを増やして調整 */
+      .follow-img-2 {
+        position: absolute;
+        width: 300px;
+        height: auto;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <img id="eye" class="follow-img" src="眼鏡アイコン.png" alt="画像_目" />
+      <img id="face" class="follow-img-2" src="サラリーマン.png" alt="画像_顔" />
+    </div>
+
+    <script>
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      // 各画像の設定
+      const objects = [
+        {
+          el: document.getElementById("eye"),
+          x: centerX,
+          y: centerY,
+          targetX: centerX,
+          targetY: centerY,
+          maxRadius: 30,
+          speed: 0.08,
+          offsetX: 0,
+          offsetY: -40,
+        },
+        {
+          el: document.getElementById("face"),
+          x: centerX,
+          y: centerY,
+          targetX: centerX,
+          targetY: centerY,
+          maxRadius: 20,
+          speed: 0.04,
+          offsetX: 0,
+          offsetY: 0,
+        },
+      ];
+
+      // 初期配置
+      for (const obj of objects) {
+        obj.el.style.left = `${centerX}px`;
+        obj.el.style.top = `${centerY}px`;
+      }
+
+      //マウス追従機能
+      document.addEventListener("mousemove", (e) => {
+        for (const obj of objects) {
+          const refCenterX = centerX + obj.offsetX;
+          const refCenterY = centerY + obj.offsetY;
+          const dx = e.clientX - refCenterX;
+          const dy = e.clientY - refCenterY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist <= obj.maxRadius) {
+            obj.targetX = e.clientX;
+            obj.targetY = e.clientY;
+          } else {
+            const ratio = obj.maxRadius / dist;
+            obj.targetX = refCenterX + dx * ratio;
+            obj.targetY = refCenterY + dy * ratio;
+          }
+        }
+      });
+
+      //画像アニメーション
+      function animate() {
+        for (const obj of objects) {
+          obj.x += (obj.targetX - obj.x) * obj.speed;
+          obj.y += (obj.targetY - obj.y) * obj.speed;
+          obj.el.style.left = `${obj.x}px`;
+          obj.el.style.top = `${obj.y}px`;
+        }
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      //リサイズ時にoffsetを反映反映
+      function resetPosition() {
+        for (const obj of objects) {
+          const baseX = centerX + obj.offsetX;
+          const baseY = centerY + obj.offsetY;
+          obj.x = baseX;
+          obj.y = baseY;
+          obj.targetX = baseX;
+          obj.targetY = baseY;
+          obj.el.style.left = `${baseX}px`;
+          obj.el.style.top = `${baseY}px`;
+        }
+      }
+      resetPosition();
+
+      window.addEventListener("resize", () => {
+        centerX = window.innerWidth / 2;
+        centerY = window.innerHeight / 2;
+        resetPosition();
+      });
+    </script>
+  </body>
+</html>
