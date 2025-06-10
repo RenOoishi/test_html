@@ -36,11 +36,12 @@
   <body>
     <div id="container">
       <img id="eye" class="follow-img" src="眼鏡アイコン.png" alt="画像_目" />
+      <img id="mouth" class="follow-img" src="口.png" alt="画像_口" />
       <img id="face" class="follow-img-2" src="サラリーマン.png" alt="画像_顔" />
     </div>
 
     <script>
-      let centerX = window.innerWidth / 2; // 修正: letに変更（後で再代入するため）
+      let centerX = window.innerWidth / 2;
       let centerY = window.innerHeight / 2;
 
       const objects = [
@@ -56,11 +57,20 @@
           offsetY: -40,
         },
         {
+          el: document.getElementById("mouth"),
+          x: centerX,
+          y: centerY,
+          targetX: centerX,
+          targetY: centerY,
+          maxRadius: 20,
+          speed: 0.08,
+          offsetX: 0,
+          offsetY: 0,
+        },
+        {
           el: document.getElementById("face"),
           x: centerX,
           y: centerY,
-          // targetX: centerX,
-          // targetY: centerY,
           maxRadius: 20,
           speed: 0.04,
           offsetX: 0,
@@ -102,28 +112,40 @@
           }
         },
         { passive: true }
-      ); // スクロール抑制を避ける
+      );
 
       function animate() {
         const eye = objects[0]; // 画像1（目）
-        const face = objects[1]; // 画像2（顔）
+        const mouth = objects[1]; // 画像2（口）
+        const face = objects[2]; // 画像3（顔）
 
-        // 目を動かす（今までどおり）
+        // 目を動かす
         eye.x += (eye.targetX - eye.x) * eye.speed;
         eye.y += (eye.targetY - eye.y) * eye.speed;
         eye.el.style.left = `${eye.x}px`;
         eye.el.style.top = `${eye.y}px`;
 
-        // 目の移動に連動して顔を動かす（倍率は小さめ）
+        // 目の移動に連動して顔を動かす
         const eyeOffsetX = eye.x - (centerX + eye.offsetX);
         const eyeOffsetY = eye.y - (centerY + eye.offsetY);
-        const faceTargetX = centerX + face.offsetX + eyeOffsetX * 0.5; // ←連動度合い
+        const faceTargetX = centerX + face.offsetX + eyeOffsetX * 0.5;
         const faceTargetY = centerY + face.offsetY + eyeOffsetY * 0.5;
+
+        // Y方向の動きの抑制：上方向はそのまま、下方向は0.4倍
+        const mouthYOffset = eyeOffsetY >= 0 ? eyeOffsetY * 0.7 : eyeOffsetY;
+        
+        // 目の移動に連動して口を動かす
+        const mouthTargetX = centerX + mouth.offsetX + eyeOffsetX * 1.0;
+        const mouthTargetY = centerY + mouth.offsetY + mouthYOffset;
 
         face.x += (faceTargetX - face.x) * face.speed;
         face.y += (faceTargetY - face.y) * face.speed;
         face.el.style.left = `${face.x}px`;
         face.el.style.top = `${face.y}px`;
+        mouth.x += (mouthTargetX - mouth.x) * mouth.speed;
+        mouth.y += (mouthTargetY - mouth.y) * mouth.speed;
+        mouth.el.style.left = `${mouth.x}px`;
+        mouth.el.style.top = `${mouth.y}px`;
 
         requestAnimationFrame(animate);
       }
