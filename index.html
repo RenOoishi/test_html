@@ -2,10 +2,10 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>Live2D風 2画像追従</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- ★ 追加 -->
+    <title>Live2D風 スマホ対応</title>
     <style>
-      html,
-      body {
+      html, body {
         margin: 0;
         height: 100%;
         overflow: hidden;
@@ -23,7 +23,6 @@
         transform: translate(-50%, -50%);
         pointer-events: none;
       }
-      /* 画像の大きさが違った場合はこちらを増やして調整 */
       .follow-img-2 {
         position: absolute;
         width: 300px;
@@ -40,10 +39,9 @@
     </div>
 
     <script>
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
+      let centerX = window.innerWidth / 2; // 修正: letに変更（後で再代入するため）
+      let centerY = window.innerHeight / 2;
 
-      // 各画像の設定
       const objects = [
         {
           el: document.getElementById("eye"),
@@ -69,33 +67,38 @@
         },
       ];
 
-      // 初期配置
-      for (const obj of objects) {
-        obj.el.style.left = `${centerX}px`;
-        obj.el.style.top = `${centerY}px`;
-      }
-
-      //マウス追従機能
-      document.addEventListener("mousemove", (e) => {
+      function updateTargets(clientX, clientY) {
         for (const obj of objects) {
           const refCenterX = centerX + obj.offsetX;
           const refCenterY = centerY + obj.offsetY;
-          const dx = e.clientX - refCenterX;
-          const dy = e.clientY - refCenterY;
+          const dx = clientX - refCenterX;
+          const dy = clientY - refCenterY;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist <= obj.maxRadius) {
-            obj.targetX = e.clientX;
-            obj.targetY = e.clientY;
+            obj.targetX = clientX;
+            obj.targetY = clientY;
           } else {
             const ratio = obj.maxRadius / dist;
             obj.targetX = refCenterX + dx * ratio;
             obj.targetY = refCenterY + dy * ratio;
           }
         }
+      }
+
+      // PC: マウス追従
+      document.addEventListener("mousemove", (e) => {
+        updateTargets(e.clientX, e.clientY);
       });
 
-      //画像アニメーション
+      // スマホ: タッチ対応
+      document.addEventListener("touchmove", (e) => {
+        if (e.touches.length > 0) {
+          const touch = e.touches[0];
+          updateTargets(touch.clientX, touch.clientY);
+        }
+      }, { passive: true }); // スクロール抑制を避ける
+
       function animate() {
         for (const obj of objects) {
           obj.x += (obj.targetX - obj.x) * obj.speed;
@@ -108,7 +111,6 @@
 
       animate();
 
-      //リサイズ時にoffsetを反映反映
       function resetPosition() {
         for (const obj of objects) {
           const baseX = centerX + obj.offsetX;
