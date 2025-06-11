@@ -1,5 +1,8 @@
 import { createObjects } from "./config/objects.js";
 import { animate } from "./scripts/animate.js";
+import { setupCustomCursor } from "./scripts/cursor.js";
+
+setupCustomCursor();
 
 let centerX = window.innerWidth / 2;
 let centerY = window.innerHeight / 2;
