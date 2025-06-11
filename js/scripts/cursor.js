@@ -6,16 +6,24 @@ export function setupCustomCursor() {
     cursor.style.top = `${y}px`;
   };
 
-  // マウス対応
+  // マウス移動
   document.addEventListener("mousemove", (e) => {
     updateCursor(e.clientX, e.clientY);
   });
 
-  // タッチデバイス対応（タッチ位置をカーソルに反映）
+  // タッチ移動
   document.addEventListener("touchmove", (e) => {
     if (e.touches.length > 0) {
-      const touch = e.touches[0];
-      updateCursor(touch.clientX, touch.clientY);
+      updateCursor(e.touches[0].clientX, e.touches[0].clientY);
     }
   }, { passive: true });
+
+  // 押し込みのエフェクト
+  const activate = () => cursor.classList.add("active");
+  const deactivate = () => cursor.classList.remove("active");
+
+  document.addEventListener("mousedown", activate);
+  document.addEventListener("mouseup", deactivate);
+  document.addEventListener("touchstart", activate, { passive: true });
+  document.addEventListener("touchend", deactivate);
 }
