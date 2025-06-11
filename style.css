@@ -43,3 +43,16 @@ img {
   transform: translate(-50%, -50%) scaleY(0.8);
   filter: invert(1) brightness(1.2);
 }
+#hot_spot {
+  position: absolute;
+  width: 120px;   /* 当たり判定の幅 */
+  height: 80px;  /* 当たり判定の高さ */
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  /* 透明でクリックイベント拾う */
+  background: rgba(0, 0, 0, 0);
+  z-index: 10;
+}
+#hot_spot.dragging {
+  cursor: grabbing;
+}

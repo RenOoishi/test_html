@@ -31,5 +31,14 @@ export function createObjects(centerX, centerY) {
       offsetX: 0,
       offsetY: 0,
     },
+    {
+      el: document.getElementById("hot_spot"),
+      x: centerX,
+      y: centerY,
+      maxRadius: 20,
+      speed: 0.04,
+      offsetX: 0,
+      offsetY: -100,
+    },
   ];
 }

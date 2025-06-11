@@ -44,6 +44,39 @@ document.addEventListener(
   { passive: true }
 );
 
+// 頭をなでると目が変化
+const hotSpot = document.getElementById("hot_spot");
+const eye = document.getElementById("eye");
+let isDragging = false;
+let dragStarted = false;
+
+hotSpot.addEventListener("mousedown", () => {
+  isDragging = true;
+  dragStarted = false;
+  hotSpot.classList.add("dragging");
+});
+
+window.addEventListener("mouseup", () => {
+  if (isDragging) {
+    isDragging = false;
+    dragStarted = false;
+    hotSpot.classList.remove("dragging");
+    // eye画像を元に戻す
+    eye.src = "images/glase.png";
+  }
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    if (!dragStarted) {
+      dragStarted = true;
+      // eye画像をドラッグ用に切替え
+      eye.src = "hoge.png"; // 変更したい画像パス
+    }
+    // 必要ならドラッグ中の動作追加
+  }
+});
+
 function resetPosition() {
   for (const obj of objects) {
     const baseX = centerX + obj.offsetX;
