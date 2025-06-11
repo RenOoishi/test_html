@@ -1,6 +1,7 @@
 import { createObjects } from "./config/objects.js";
 import { animate } from "./scripts/animate.js";
 import { setupCustomCursor } from "./scripts/cursor.js";
+import { startBlinking } from './scripts/blink.js';
 
 setupCustomCursor();
 
@@ -66,3 +67,5 @@ window.addEventListener("resize", () => {
 
 // 開始
 animate(objects, centerX, centerY);
+
+startBlinking(1000, 5000);
