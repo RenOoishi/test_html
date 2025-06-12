@@ -80,6 +80,43 @@ window.addEventListener("mousemove", (e) => {
   }
 });
 
+// スマホ用（なで始め）
+hotSpot.addEventListener("touchstart", () => {
+  isDragging = true;
+  dragStarted = false;
+  hotSpot.classList.add("dragging");
+}, { passive: true });
+
+// スマホ用（なで続ける）
+window.addEventListener("touchmove", (e) => {
+  if (isDragging && !dragStarted) {
+    dragStarted = true;
+    eye.src = "images/sunglase.png";
+    mouth.src = "images/mouth_2.png";
+  }
+}, { passive: true });
+
+// スマホ用（離したとき）
+window.addEventListener("touchend", () => {
+  if (isDragging) {
+    isDragging = false;
+    dragStarted = false;
+    hotSpot.classList.remove("dragging");
+    eye.src = "images/glase.png";
+    mouth.src = "images/mouth.png";
+  }
+});
+
+window.addEventListener("touchcancel", () => {
+  if (isDragging) {
+    isDragging = false;
+    dragStarted = false;
+    hotSpot.classList.remove("dragging");
+    eye.src = "images/glase.png";
+    mouth.src = "images/mouth.png";
+  }
+});
+
 function resetPosition() {
   for (const obj of objects) {
     const baseX = centerX + obj.offsetX;
