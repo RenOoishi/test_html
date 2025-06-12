@@ -77,10 +77,7 @@ window.addEventListener("mousemove", (e) => {
   }
 });
 
-// 開始
-animate(objects, centerX, centerY);
 
-startBlinking(1000, 5000);
 
 function resetPosition() {
   for (const obj of objects) {
@@ -102,3 +99,8 @@ window.addEventListener("resize", () => {
   centerY = window.innerHeight / 2;
   resetPosition();
 });
+
+// 開始
+animate(objects, centerX, centerY);
+
+startBlinking(1000, 5000);

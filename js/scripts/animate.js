@@ -5,6 +5,14 @@ export function animate(objects, centerX, centerY) {
   const hot_spot = objects[3];
 
   function step() {
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
+
+    window.addEventListener("resize", () => {
+      centerX = window.innerWidth / 2;
+      centerY = window.innerHeight / 2;
+    });
+
     eye.x += (eye.targetX - eye.x) * eye.speed;
     eye.y += (eye.targetY - eye.y) * eye.speed;
     eye.el.style.left = `${eye.x}px`;
