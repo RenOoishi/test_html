@@ -16,7 +16,7 @@
 
 ## 推奨環境
 
-- **OS** : <ins>WIndows10</ins> / <ins>Windows11</ins> / <ins>Android</ins> ~~(その他のOSでは検証していないため非推奨)~~
+- **OS** : <ins>WIndows10</ins> / <ins>Windows11</ins> / <ins>Android</ins> (その他のOS~~では検証をサボったため~~非推奨)
 - **ブラウザ** : <ins>Google Chrome</ins> / <ins>Brave</ins> / <ins>Microsoft Edge</ins>
 
 ## 免責事項
