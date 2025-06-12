@@ -1,7 +1,7 @@
 import { createObjects } from "./config/objects.js";
 import { animate } from "./scripts/animate.js";
 import { setupCustomCursor } from "./scripts/cursor.js";
-import { startBlinking } from './scripts/blink.js';
+import { startBlinking } from "./scripts/blink.js";
 
 setupCustomCursor();
 
@@ -47,6 +47,7 @@ document.addEventListener(
 // 頭をなでると目が変化
 const hotSpot = document.getElementById("hot_spot");
 const eye = document.getElementById("eye");
+const mouth = document.getElementById("mouth");
 let isDragging = false;
 let dragStarted = false;
 
@@ -63,6 +64,7 @@ window.addEventListener("mouseup", () => {
     hotSpot.classList.remove("dragging");
     // eye画像を元に戻す
     eye.src = "images/glase.png";
+    mouth.src = "images/mouth.png";
   }
 });
 
@@ -71,13 +73,12 @@ window.addEventListener("mousemove", (e) => {
     if (!dragStarted) {
       dragStarted = true;
       // eye画像をドラッグ用に切替え
-      eye.src = "hoge.png"; // 変更したい画像パス
+      eye.src = "images/sunglase.png"; // 変更したい画像パス
+      mouth.src = "images/mouth_2.png";
     }
     // 必要ならドラッグ中の動作追加
   }
 });
-
-
 
 function resetPosition() {
   for (const obj of objects) {
