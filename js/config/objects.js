@@ -1,6 +1,17 @@
 export function createObjects(centerX, centerY) {
   return [
     {
+      el: document.getElementById("background"),
+      x: centerX,
+      y: centerY,
+      targetX: centerX,
+      targetY: centerY,
+      maxRadius: 20,
+      speed: 0.04,
+      offsetX: 0,
+      offsetY: 0,
+      behavior: "flee", // 👈 これが逃げる
+    },{
       el: document.getElementById("eye"),
       x: centerX,
       y: centerY,
@@ -10,6 +21,7 @@ export function createObjects(centerX, centerY) {
       speed: 0.08,
       offsetX: 0,
       offsetY: -40,
+      behavior: "chase", // 👈 これが追う
     },
     {
       el: document.getElementById("mouth"),
@@ -21,6 +33,7 @@ export function createObjects(centerX, centerY) {
       speed: 0.08,
       offsetX: 0,
       offsetY: 0,
+      behavior: "chase",
     },
     {
       el: document.getElementById("face"),
@@ -32,6 +45,7 @@ export function createObjects(centerX, centerY) {
       speed: 0.04,
       offsetX: 0,
       offsetY: 0,
+      behavior: "chase",
     },
     {
       el: document.getElementById("hot_spot"),
@@ -43,6 +57,7 @@ export function createObjects(centerX, centerY) {
       speed: 0.04,
       offsetX: 0,
       offsetY: -100,
+      behavior: "chase",
     },
   ];
 }

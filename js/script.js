@@ -14,8 +14,13 @@ function updateTargets(clientX, clientY) {
   for (const obj of objects) {
     const refCenterX = centerX + obj.offsetX;
     const refCenterY = centerY + obj.offsetY;
-    const dx = clientX - refCenterX;
-    const dy = clientY - refCenterY;
+    let dx = clientX - refCenterX;
+    let dy = clientY - refCenterY;
+    // fleeの場合は向きを反転（逃げる）
+    if (obj.behavior === "flee") {
+      dx *= -1;
+      dy *= -1;
+    }
     const dist = Math.sqrt(dx * dx + dy * dy);
 
     if (dist <= obj.maxRadius) {
@@ -81,20 +86,28 @@ window.addEventListener("mousemove", (e) => {
 });
 
 // スマホ用（なで始め）
-hotSpot.addEventListener("touchstart", () => {
-  isDragging = true;
-  dragStarted = false;
-  hotSpot.classList.add("dragging");
-}, { passive: true });
+hotSpot.addEventListener(
+  "touchstart",
+  () => {
+    isDragging = true;
+    dragStarted = false;
+    hotSpot.classList.add("dragging");
+  },
+  { passive: true }
+);
 
 // スマホ用（なで続ける）
-window.addEventListener("touchmove", (e) => {
-  if (isDragging && !dragStarted) {
-    dragStarted = true;
-    eye.src = "images/sunglase.png";
-    mouth.src = "images/mouth_2.png";
-  }
-}, { passive: true });
+window.addEventListener(
+  "touchmove",
+  (e) => {
+    if (isDragging && !dragStarted) {
+      dragStarted = true;
+      eye.src = "images/sunglase.png";
+      mouth.src = "images/mouth_2.png";
+    }
+  },
+  { passive: true }
+);
 
 // スマホ用（離したとき）
 window.addEventListener("touchend", () => {

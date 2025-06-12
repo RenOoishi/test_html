@@ -1,8 +1,9 @@
 export function animate(objects, centerX, centerY) {
-  const eye = objects[0];
-  const mouth = objects[1];
-  const face = objects[2];
-  const hot_spot = objects[3];
+  const background = objects[0];
+  const eye = objects[1];
+  const mouth = objects[2];
+  const face = objects[3];
+  const hot_spot = objects[4];
 
   function step() {
     let centerX = window.innerWidth / 2;
@@ -12,6 +13,10 @@ export function animate(objects, centerX, centerY) {
       centerX = window.innerWidth / 2;
       centerY = window.innerHeight / 2;
     });
+    background.x += (background.targetX - background.x) * background.speed;
+    background.y += (background.targetY - background.y) * background.speed;
+    background.el.style.left = `${background.x}px`;
+    background.el.style.top = `${background.y}px`;
 
     eye.x += (eye.targetX - eye.x) * eye.speed;
     eye.y += (eye.targetY - eye.y) * eye.speed;
